@@ -1,5 +1,6 @@
 name: Probe meal API
 on:
+  push:
   workflow_dispatch:
 permissions:
   contents: read
