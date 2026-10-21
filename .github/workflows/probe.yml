@@ -1,0 +1,25 @@
+name: Probe meal API
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: macos-latest
+    timeout-minutes: 3
+    steps:
+      - name: Test Webetu connection
+        run: |
+          python3 - <<'PY'
+          import urllib.error
+          import urllib.request
+          url = 'https://api-webetu.mesrs.dz/api/authentication/v1/'
+          try:
+              with urllib.request.urlopen(urllib.request.Request(url, method='GET'), timeout=12) as response:
+                  print('HTTP status:', response.status)
+          except urllib.error.HTTPError as exc:
+              print('HTTP status:', exc.code)
+          except Exception as exc:
+              print('Connection error:', type(exc).__name__, str(exc)[:180])
+              raise SystemExit(1)
+          PY
